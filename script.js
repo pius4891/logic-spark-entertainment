@@ -66,8 +66,12 @@ function showConnectionError() {
 }
 
 /* =========================
-   PAGE NAVIGATION - FIXED VERSION
+   PAGE NAVIGATION - IMPROVED VERSION
 ========================= */
+
+// Track navigation history
+let navigationHistory = ['home'];
+let currentPageIndex = 0;
 
 // Initialize navigation on page load
 document.addEventListener("DOMContentLoaded", async () => {
@@ -78,6 +82,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Setup all navigation elements
   setupNavigation();
+  
+  // Add back to home button to all pages
+  addBackToHomeButton();
   
   // Check URL hash for direct page access
   handleUrlHash();
@@ -94,7 +101,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Handle browser back/forward buttons
   window.addEventListener('popstate', function(event) {
-    handleUrlHash();
+    if (event.state && event.state.page) {
+      showPage(event.state.page, false);
+    } else {
+      handleUrlHash();
+    }
   });
 });
 
@@ -102,10 +113,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 function handleUrlHash() {
   const hash = window.location.hash.substring(1); // Remove the # symbol
   if (hash) {
-    // If hash exists, try to show that page
-    showPage(hash, false); // false = don't update hash again
+    showPage(hash, false);
   } else {
-    // Default to home page
     showPage('home', false);
   }
 }
@@ -117,21 +126,92 @@ function setupNavigation() {
   const navButtons = document.querySelectorAll("nav button, .footer-section a[data-page], .primary-btn[onclick*='showPage'], .secondary-btn[onclick*='showPage']");
   
   navButtons.forEach(button => {
-    // Remove existing listeners to prevent duplicates
     button.removeEventListener('click', navigationHandler);
-    // Add new listener
     button.addEventListener('click', navigationHandler);
   });
   
-  // Also handle the Login button separately
+  // Handle login button
   const loginBtn = document.querySelector(".login-btn");
   if (loginBtn) {
     loginBtn.removeEventListener('click', loginHandler);
     loginBtn.addEventListener('click', loginHandler);
   }
+  
+  // Add home button to header if it doesn't exist
+  addHomeButtonToHeader();
 }
 
-// Separate handler for login button
+// Add a home button to the header for easy navigation
+function addHomeButtonToHeader() {
+  const headerActions = document.querySelector('.header-actions');
+  if (!headerActions) return;
+  
+  // Check if home button already exists
+  if (document.querySelector('.home-nav-btn')) return;
+  
+  const homeBtn = document.createElement('button');
+  homeBtn.className = 'home-nav-btn';
+  homeBtn.innerHTML = '<i class="fas fa-home"></i> Home';
+  homeBtn.style.marginRight = '10px';
+  homeBtn.style.backgroundColor = 'transparent';
+  homeBtn.style.border = '1px solid #ff8c00';
+  homeBtn.style.color = '#ff8c00';
+  homeBtn.style.padding = '8px 15px';
+  homeBtn.style.borderRadius = '5px';
+  homeBtn.style.cursor = 'pointer';
+  homeBtn.style.fontWeight = '500';
+  
+  homeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showPage('home', true);
+  });
+  
+  homeBtn.addEventListener('mouseover', () => {
+    homeBtn.style.backgroundColor = '#ff8c00';
+    homeBtn.style.color = '#fff';
+  });
+  
+  homeBtn.addEventListener('mouseout', () => {
+    homeBtn.style.backgroundColor = 'transparent';
+    homeBtn.style.color = '#ff8c00';
+  });
+  
+  headerActions.prepend(homeBtn);
+}
+
+// Add "Back to Home" button to each page
+function addBackToHomeButton() {
+  const pages = document.querySelectorAll('.page');
+  
+  pages.forEach(page => {
+    // Skip if button already exists
+    if (page.querySelector('.back-to-home')) return;
+    
+    // Don't add to home page
+    if (page.id === 'home') return;
+    
+    const backButton = document.createElement('div');
+    backButton.className = 'back-to-home';
+    backButton.style.margin = '20px 0';
+    backButton.style.textAlign = 'center';
+    
+    backButton.innerHTML = `
+      <button onclick="showPage('home', true)" 
+        style="background: transparent; border: 2px solid #ff8c00; color: #ff8c00; 
+               padding: 10px 25px; border-radius: 25px; font-size: 16px; 
+               font-weight: 600; cursor: pointer; display: inline-flex; 
+               align-items: center; gap: 8px; transition: all 0.3s ease;"
+        onmouseover="this.style.background='#ff8c00'; this.style.color='#fff';"
+        onmouseout="this.style.background='transparent'; this.style.color='#ff8c00';">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </button>
+    `;
+    
+    page.appendChild(backButton);
+  });
+}
+
+// Login handler
 function loginHandler(e) {
   e.preventDefault();
   window.location.href = 'auth.html';
@@ -143,11 +223,9 @@ function navigationHandler(e) {
   
   let pageId = null;
   
-  // Get page ID from different possible sources
   if (this.dataset && this.dataset.page) {
     pageId = this.dataset.page;
   } else if (this.getAttribute('onclick')) {
-    // Parse onclick attribute for showPage calls
     const onclick = this.getAttribute('onclick');
     const match = onclick.match(/showPage\s*\(\s*['"]([^'"]+)['"]\s*\)/);
     if (match) {
@@ -158,12 +236,18 @@ function navigationHandler(e) {
   console.log("Navigation clicked:", pageId);
   
   if (pageId) {
-    showPage(pageId, true); // true = update URL hash
+    showPage(pageId, true);
   }
 }
 
 function showPage(pageId, updateHash = true) {
   console.log("Showing page:", pageId);
+  
+  // Update navigation history
+  if (navigationHistory[navigationHistory.length - 1] !== pageId) {
+    navigationHistory.push(pageId);
+    currentPageIndex = navigationHistory.length - 1;
+  }
   
   // Hide all pages
   document.querySelectorAll(".page").forEach(page => {
@@ -180,9 +264,11 @@ function showPage(pageId, updateHash = true) {
     // Scroll to top smoothly
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Update URL hash for browser history (if requested)
+    // Update URL hash for browser history
     if (updateHash) {
       window.location.hash = pageId;
+      // Add to browser history
+      history.pushState({ page: pageId }, '', `#${pageId}`);
     }
 
     // Update active state in navigation
@@ -190,30 +276,70 @@ function showPage(pageId, updateHash = true) {
 
     // Initialize forms if needed
     if (pageId === "contact") {
-      setTimeout(initContactForm, 100); // Small delay to ensure DOM is ready
+      setTimeout(initContactForm, 100);
     }
     if (pageId === "sponsor-form") {
       setTimeout(initSponsorForm, 100);
     }
+    
+    // Show/hide back to home button based on page
+    updateBackButtonVisibility(pageId);
+    
   } else {
     console.error("Page not found:", pageId);
-    // If page not found, show home
     if (pageId !== 'home') {
       showPage('home', updateHash);
     }
   }
 }
 
+// Update back button visibility
+function updateBackButtonVisibility(currentPage) {
+  const backButtons = document.querySelectorAll('.back-to-home');
+  backButtons.forEach(btn => {
+    if (currentPage === 'home') {
+      btn.style.display = 'none';
+    } else {
+      btn.style.display = 'block';
+    }
+  });
+}
+
 function updateActiveNavState(pageId) {
-  // Remove active class from all nav buttons
   document.querySelectorAll("nav button").forEach(btn => {
     btn.classList.remove("active-link");
   });
   
-  // Add active class to current page button
   document.querySelectorAll(`nav button[data-page="${pageId}"]`).forEach(btn => {
     btn.classList.add("active-link");
   });
+}
+
+// Add keyboard navigation (press 'h' for home)
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'h' || e.key === 'H') {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      showPage('home', true);
+    }
+  }
+  
+  // Alt + left arrow for back
+  if (e.altKey && e.key === 'ArrowLeft') {
+    e.preventDefault();
+    goBack();
+  }
+});
+
+// Go back to previous page
+function goBack() {
+  if (navigationHistory.length > 1) {
+    navigationHistory.pop(); // Remove current
+    const previousPage = navigationHistory[navigationHistory.length - 1];
+    showPage(previousPage, true);
+  } else {
+    showPage('home', true);
+  }
 }
 
 /* =========================
@@ -227,11 +353,9 @@ function initContactForm() {
     return;
   }
 
-  // Remove existing listener to prevent duplicates
   const newForm = form.cloneNode(true);
   form.parentNode.replaceChild(newForm, form);
   
-  // Create or get response element
   let response = document.getElementById("formResponse");
   if (!response) {
     response = document.createElement("p");
@@ -252,13 +376,11 @@ function initContactForm() {
     const email = emailInput?.value.trim();
     const message = messageInput?.value.trim();
 
-    // Validate
     if (!name || !email || !message) {
       showFormResponse(response, "Please fill in all fields", "red");
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       showFormResponse(response, "Please enter a valid email address", "red");
@@ -301,11 +423,9 @@ function initSponsorForm() {
     return;
   }
 
-  // Remove existing listener
   const newForm = form.cloneNode(true);
   form.parentNode.replaceChild(newForm, form);
   
-  // Create or get response element
   let responseMsg = document.getElementById("sponsorResponse");
   if (!responseMsg) {
     responseMsg = document.createElement("p");
@@ -326,7 +446,6 @@ function initSponsorForm() {
       message: newForm.querySelector('textarea[name="Message"]')?.value
     };
 
-    // Validate required fields
     if (!formData.name || !formData.email || !formData.supportType || !formData.message) {
       showFormResponse(responseMsg, "Please fill in all required fields", "red");
       return;
@@ -396,10 +515,12 @@ function updateAuthButton() {
 // Global functions
 window.showPage = showPage;
 window.showSponsorForm = () => showPage("sponsor-form");
+window.goBack = goBack;
 
-// Re-initialize on page show (for mobile browsers)
+// Re-initialize on page show
 window.addEventListener('pageshow', function(event) {
   handleUrlHash();
   setupNavigation();
+  addBackToHomeButton();
   updateAuthButton();
 });
