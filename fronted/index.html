@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logic Spark Entertainment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-container">
+
+    <!-- Brand -->
+    <div class="brand">
+      <img src="images/logo.jpg" alt="Logic Spark Logo" class="logo">
+      <span class="brand-name">Logic Spark</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">median_sales_estimate
+      <button data-page="home" class="active-link">Home</button>
+      <button data-page="about">About</button>
+      <button data-page="activities">Activities</button>
+      <button data-page="shop">Shop</button>
+      <button data-page="media">Media</button>
+      <button data-page="contact">Contact</button>
+      <button data-page="sponsor">Sponsor</button>
+    </nav>
+
+    <!-- Actions -->
+    <div class="header-actions">
+      <button class="login-btn" onclick="window.location.href='auth.html'">
+        <i class="fas fa-user"></i> Login
+      </button>
+    </div>
+
+  </div>
+</header>
+
+
+<main>
+<!-- ================= HOME PAGE ================= -->
+<section id="home" class="page active home-section">
+
+  <!-- HERO -->
+  <div class="home-hero">
+    <div class="home-text">
+      <h1>Igniting Talent.<br>Empowering Youth.</h1>
+
+      <p>
+        <strong>Logic Spark Entertainment</strong> is a creative hub connecting
+        young creatives with real opportunities through entertainment,
+        education, and mentorship.
+      </p>
+
+      <div class="home-actions">
+        <button class="primary-btn" onclick="showPage('activities')">Explore Activities</button>
+        <button class="secondary-btn" onclick="showPage('contact')">Get In Touch</button>
+      </div>
+    </div>
+
+    <div class="home-image">
+      <img src="images/logo.jpg" alt="Youth Creative Event">
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="home-features">
+    <div class="feature-card">
+      <img src="images/pag2.jpeg">
+      <h4>Corporate & Youth Events</h4>
+    </div>
+
+    <div class="feature-card">
+      <img src="images/gap.png">
+      <h4>Music & Festivals</h4>
+    </div>
+
+    <div class="feature-card">
+      <img src="images/mentorship.png">
+      <h4>Mentorship Programs</h4>
+    </div>
+  </div>
+
+  <!-- WHO WE ARE -->
+  <section class="home-section-block">
+    <div class="split">
+      <div>
+        <h2>Who We Are</h2>
+        <p>
+          Logic Spark Entertainment is more than an events company — we are a
+          <strong>movement</strong> dedicated to empowering young creatives.
+        </p>
+        <p>
+          We combine <strong>music</strong>, <strong>education</strong>,
+          <strong>mentorship</strong>, and <strong>innovation</strong> to build
+          platforms where talent is discovered, nurtured, and connected to
+          real-world opportunities.
+        </p>
+      </div>
+
+      <img src="images/pag2.jpeg" alt="Creative Youth Team">
+    </div>
+  </section>
+
+  <!-- WHAT WE DO -->
+  <section class="home-section-block">
+    <h2 class="center">What We Do</h2>
+
+    <div class="cards">
+      <div class="info-card">
+        <h3>🎤 Events & Experiences</h3>
+        <p>
+          We organize corporate functions, youth forums, brand activations,
+          and community-driven events.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>🎶 Music & Festivals</h3>
+        <p>
+          From live shows to large-scale festivals like <strong>Future Fest</strong>,
+          we create unforgettable entertainment experiences.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>🎓 Mentorship & Training</h3>
+        <p>
+          We guide young creatives through skill development, mentorship,
+          and career exposure.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>📱 Digital Media</h3>
+        <p>
+          Podcasts, video content, interviews, and storytelling that amplify
+          youth voices.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>🤝 Opportunities</h3>
+        <p>
+          We connect creatives with brands, corporates, and employment
+          opportunities.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="home-section-block dark">
+    <h2 class="center">Why Logic Spark?</h2>
+
+    <div class="cards">
+      <div class="info-card">🎯 Youth-Centered Approach</div>
+      <div class="info-card">🤝 Corporate Partnerships</div>
+      <div class="info-card">🚀 Real Career Impact</div>
+      <div class="info-card">🎨 Creative Excellence</div>
+    </div>
+  </section>
+
+  <!-- VISION -->
+  <section class="home-section-block">
+    <h2 class="center">Our Vision</h2>
+    <p class="center max">
+      We envision a future where young creatives are empowered, skilled, and
+      confidently positioned within the creative and corporate economy.
+      Logic Spark exists to bridge the gap between talent and opportunity.
+    </p>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Ready to Spark the Future?</h2>
+    <p>
+      Whether you're a young creative, artist, or corporate partner —
+      there’s a place for you at Logic Spark.
+    </p>
+
+    <div class="home-actions">
+      <button class="primary-btn" onclick="showPage('activities')">Get Started</button>
+      <button class="secondary-btn" onclick="showPage('sponsor')">Partner With Us</button>
+    </div>
+  </section>
+
+</section>
+<!-- ================= END HOME PAGE ================= -->
+
+
+     <!-- ABOUT SECTION -->
+    <section id="about" class="page about-section">
+      <h2>About Logic Spark Entertainment</h2>
+
+      <!-- Block 1 -->
+       <div class="about-block">
+        <img src="images/youths.jpg" alt="Logic Spark Entertainment">
+        <div class="about-text">
+            <p>
+                Logic Spark Entertainment is a youth-centered creative and development company
+                focused on nurturing talent, innovation, and opportunity through entertainment,
+                education, and professional exposure.
+            </p>
+        </div>
+      </div>
+
+      <!-- Block 2 (image right) -->
+     <div class="about-block reverse">
+        <img src="images/gap.png" alt="Youth Empowerment">
+        <div class="about-text">
+            <p>
+                We exist to bridge the gap between young creatives and corporate institutions by
+                creating platforms where talent is discovered, trained, and connected to real-world
+                opportunities.
+            </p>
+        </div>
+     </div>
+
+     <!-- What We Do -->
+     <div class="about-block">
+        <img src="images/acts.png" alt="What We Do">
+        <div class="about-text">
+            <h3>What We Do</h3>
+            <ul>
+                <li>Organize corporate and youth-focused events</li>
+                <li>Host music shows, festivals, and live performances</li>
+                <li>Run mentorship and talent development programs</li>
+                <li>Produce digital media and creative content</li>
+                <li>Create employment and networking opportunities</li>
+            </ul>
+        </div>
+    </div>
+
+     <!-- Vision -->
+     <div class="about-block reverse">
+        <img src="images/vision.png" alt="Our Vision">
+        <div class="about-text">
+            <h3>Our Vision</h3>
+            <p>
+                To become a leading entertainment and youth empowerment brand in Africa by
+                building sustainable creative ecosystems that uplift communities.
+            </p>
+        </div>
+    </div>
+
+    <!-- Mission -->
+    <div class="about-block">
+        <img src="images/aim.png" alt="Our Mission">
+        <div class="about-text">
+            <h3>Our Mission</h3>
+            <p>
+                To empower youth through skill development, creative expression, mentorship,
+                and access to corporate and global opportunities.
+            </p>
+        </div>
+    </div>
+
+    <!-- Values -->
+    <div class="about-block reverse">
+        <img src="images/core.png" alt="Core Values">
+        <div class="about-text">
+            <h3>Our Core Values</h3>
+            <ul>
+                <li><strong>Creativity:</strong> Original ideas and expression</li>
+                <li><strong>Integrity:</strong> Honesty and transparency</li>
+                <li><strong>Empowerment:</strong> Uplifting the next generation</li>
+                <li><strong>Collaboration:</strong> Growing through partnerships</li>
+                <li><strong>Excellence:</strong> Quality in everything we do</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+    <!-- ACTIVITIES SECTION -->
+    <section id="activities" class="page">
+        <h2>Our Activities</h2>
+        <p>
+            We run impactful programs that empower youth, promote creativity,
+            and connect talent with real-world opportunities.
+        </p>
+
+        <div class="cards">
+            <div class="card corporate">
+                <h3>Corporate & Professional Events</h3>
+                <p>
+                    Business forums, networking sessions, and mentorship programs
+                    that prepare youth for the professional world.
+                </p>
+            </div>
+
+            <div class="card music">
+                <h3>Music & Talent Development</h3>
+                <p>
+                    Platforms for artists, dancers, and performers to showcase
+                    and develop their creative skills.
+                </p>
+            </div>
+
+            <div class="card festival">
+                <h3>Festivals & Live Shows</h3>
+                <p>
+                    Youth-centered festivals such as Future Fest,
+                    celebrating creativity, culture, and innovation.
+                </p>
+            </div>
+
+            <div class="card podcast">
+                <h3>Media, Podcast & Content</h3>
+                <p>
+                    Digital media and podcasts that amplify youth voices
+                    and inspire positive social change.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOP SECTION -->
+    <section id="shop" class="page">
+        <h2>Shop</h2>
+        <p>Explore our exclusive merchandise. Grab your favorite items and show your support!</p>
+
+        <div class="cards">
+            <div class="card">
+                <img src="images/t-shirts.webp" alt="T-Shirts">
+                <h3>T-Shirts</h3>
+                <p>High-quality printed tees made with comfortable fabric. Available in multiple sizes and colors.</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="images/cup.jpeg" alt="Caps">
+                <h3>Caps</h3>
+                <p>Stylish caps that suit every occasion. Adjustable size for perfect fit and premium quality material.</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="images/hoodie.webp" alt="Hoodies">
+                <h3>Hoodies</h3>
+                <p>Comfortable hoodies for everyday wear. Soft, durable, and perfect for layering in cool weather.</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="images/mug.jpg" alt="Mugs">
+                <h3>Mugs</h3>
+                <p>Custom mugs featuring unique designs. Perfect for gifts or your morning coffee.</p>
+                <button>Buy Now</button>
+            </div>
+
+            <div class="card">
+                <img src="images/stickers.jpeg" alt="Stickers">
+                <h3>Stickers</h3>
+                <p>High-quality vinyl stickers to decorate laptops, notebooks, and more. Durable and colorful.</p>
+                <button>Buy Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MEDIA SECTION -->
+    <section id="media" class="page">
+        <h2>Media</h2>
+         <p>
+        Experience Logic Spark beyond the stage. Watch our events, listen to our podcasts,
+        and stay connected through our social media platforms.
+         </p>
+
+        <div class="cards">
+
+         <!-- YouTube -->
+          <div class="card">
+            <h3>YouTube Channel</h3>
+            <p>
+                Watch highlights from our corporate events, night shows, festivals,
+                interviews, and behind-the-scenes moments.
+            </p>
+            <a href="https://www.youtube.com/@LogicSparkEntertainment"
+               target="_blank"
+               class="primary-btn">
+                Visit YouTube
+            </a>
+          </div>
+
+         <!-- Podcast -->
+          <div class="card">
+            <h3>Logic Spark Podcast</h3>
+            <p>
+                Tune in to conversations on youth empowerment, creativity, entertainment,
+                career growth, and real-life success stories.
+            </p>
+            <a href="https://open.spotify.com/"
+               target="_blank"
+               class="primary-btn">
+                Listen on Spotify
+            </a>
+          </div>
+
+         <!-- Instagram -->
+          <div class="card">
+            <h3>Instagram</h3>
+            <p>
+                Follow us for event updates, short videos, reels, photos, and live moments
+                from Logic Spark experiences.
+            </p>
+            <a href="https://www.instagram.com/future_fest001?igsh=b3licGVqYmNpeW05"
+               target="_blank"
+               class="primary-btn">
+                Follow on Instagram
+            </a>
+          </div>
+
+         <!-- Facebook -->
+          <div class="card">
+            <h3>Facebook</h3>
+            <p>
+                Join our community, view event posters, announcements, and interact with
+                fans and partners.
+            </p>
+            <a href="https://www.facebook.com/"
+               target="_blank"
+               class="primary-btn">
+                Visit Facebook
+            </a>
+          </div>
+
+         <!-- TikTok -->
+          <div class="card">
+            <h3>TikTok</h3>
+            <p>
+                Catch viral clips, trending challenges, dance performances, and fun
+                entertainment moments.
+            </p>
+            <a href="https://www.tiktok.com/@sir_kiongo?_r=1&_t=ZM-92LeYQWNUbL"
+               target="_blank"
+               class="primary-btn">
+                Watch on TikTok
+            </a>
+          </div>
+
+        </div>
+    </section>
+
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="page contact-section">
+      <div class="contact-overlay">
+        <h2>Contact Us</h2>
+
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <p id="formResponse"></p>
+      </div>
+    </section>
+
+
+    <!-- SPONSOR SECTION -->
+    <section id="sponsor" class="page">
+      <h2>Become a Sponsor</h2>
+
+        <p>
+        Partner with Logic Spark Entertainment and help empower youth through
+        creativity, education, and impactful entertainment experiences.
+        </p>
+
+       <ul>
+        <li>Support youth talent and innovation</li>
+        <li>Gain brand visibility at major events</li>
+        <li>Build long-term community impact</li>
+       </ul>
+             <!-- NEW CONTENT STARTS HERE -->
+  <div class="sponsor-extra">
+    <h3>Why Sponsor Logic Spark?</h3>
+    <p>
+      Logic Spark Entertainment works at the intersection of youth empowerment,
+      creative arts, and corporate engagement. By sponsoring our initiatives,
+      you are investing in sustainable talent development and positive social
+      change.
+    </p>
+
+    <h3>Our Sponsorship Programs</h3>
+    <p>
+      We offer flexible sponsorship opportunities tailored to meet your brand
+      goals while creating real impact. These include:
+    </p>
+
+    <ul>
+      <li><strong>Event Sponsorship:</strong> Brand exposure at concerts, festivals, and youth forums</li>
+      <li><strong>Talent Development:</strong> Support training, mentorship, and creative workshops</li>
+      <li><strong>Media & Digital Promotion:</strong> Visibility across our media platforms</li>
+      <li><strong>Community Initiatives:</strong> Back projects that uplift youth and communities</li>
+    </ul>
+
+    <h3>Who Can Sponsor?</h3>
+    <p>
+      We collaborate with corporate brands, SMEs, NGOs, institutions,
+      entrepreneurs, and individuals who share a passion for youth empowerment,
+      creativity, and innovation.
+    </p>
+
+    <h3>What You Gain</h3>
+    <ul>
+      <li>Brand recognition and positive public image</li>
+      <li>Access to a vibrant youth audience</li>
+      <li>Long-term partnership opportunities</li>
+      <li>Measurable social and community impact</li>
+    </ul>
+
+    <p class="sponsor-cta">
+      Ready to make an impact? Fill out the sponsorship form below and let’s
+      build something meaningful together.
+    </p>
+  </div>
+  <!-- NEW CONTENT ENDS HERE -->
+
+       <button class="primary-btn" onclick="showSponsorForm()">
+        Become a Sponsor
+       </button>
+    </section>
+
+    <section id="sponsor-form" class="page">
+       <h2>Sponsorship Interest Form</h2>
+
+       <p>
+        Thank you for your interest in partnering with Logic Spark Entertainment.
+        Please tell us how you would like to support our events or programs.
+        Our team will reach out to you shortly.
+       </p>
+
+       <form id="sponsorForm">
+
+
+        <input type="text" name="Name" placeholder="Full Name / Organization" required>
+
+        <input type="email" name="Email" placeholder="Your Email Address" required>
+
+        <input type="text" name="Phone" placeholder="Phone Number (Optional)">
+
+        <select name="Support Type" required>
+           <option value="">How would you like to support?</option>
+           <option value="Financial Sponsorship">Financial Sponsorship</option>
+           <option value="Event Partnership">Event Partnership</option>
+           <option value="Brand Promotion">Brand Promotion</option>
+           <option value="Equipment Support">Equipment / Resources</option>
+           <option value="Other">Other</option>
+        </select>
+
+        <textarea name="Message"
+          placeholder="Describe how you would like to support Logic Spark or Future Fest"
+          required></textarea>
+
+            <button type="submit" class="primary-btn">
+             Submit Sponsorship Request
+          </button>
+
+       </form>
+    </section>
+
+
+</main>
+
+<footer class="site-footer">
+    <div class="footer-container">
+
+        <!-- BRAND / ABOUT -->
+        <div class="footer-section">
+            <h3>Logic Spark Entertainment</h3>
+            <p>
+                Logic Spark Entertainment is a youth-centered platform focused on
+                creativity, entertainment, education, and empowerment. We connect
+                talent with opportunity and inspire the next generation.
+            </p>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#" data-page="home">Home</a></li>
+                <li><a href="#" data-page="about">About Us</a></li>
+                <li><a href="#" data-page="activities">Activities</a></li>
+                <li><a href="#" data-page="shop">Shop</a></li>
+                <li><a href="#" data-page="media">Media</a></li>
+                <li><a href="#" data-page="contact">Contact</a></li>
+                <li><a href="#" data-page="sponsor">Become a Sponsor</a></li>
+            </ul>
+        </div>
+
+        <!-- CONTACT INFO -->
+        <div class="footer-section">
+            <h4>Contact Us</h4>
+            <p>Email: <a href="futurefest001@gmail.com">futurefest001@gmail.com</a></p>
+            <p>Phone: +254 115503803</p>
+            <p>Location: Kenya</p>
+        </div>
+
+        <!-- SOCIAL MEDIA -->
+        <div class="footer-section">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook">Facebook</a>
+                <a href="https://www.instagram.com/future_fest001?igsh=b3licGVqYmNpeW05">Instagram</a>
+                <a href="#" aria-label="YouTube">YouTube</a>
+                <a href="#" aria-label="Podcast">Podcast</a>
+                <a href="https://www.tiktok.com/@sir_kiongo?_r=1&_t=ZM-92LeYQWNUbL">Tiktok</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER BOTTOM -->
+    <div class="footer-bottom">
+        <p>© 2025 Logic Spark Entertainment. All Rights Reserved.</p>
+        <p>Designed & Developed by Logic Spark Team</p>
+    </div>
+</footer>
+
+
+<script src="script.js"></script>
+</body>
+</html>
+

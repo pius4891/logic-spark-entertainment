@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register | Logic Spark</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-container">
+    <h2>Create Account</h2>
+
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p id="registerMsg"></p>
+
+    <p class="auth-switch">
+      Already have an account?
+      <a href="auth.html">Login</a>
+    </p>
+  </div>
+
+<script>
+const API_BASE_URL = "http://localhost:5000";
+
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+
+  const msg = document.getElementById('registerMsg');
+
+  if (password !== confirmPassword) {
+    msg.style.color = 'red';
+    msg.innerText = 'Passwords do not match';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      msg.style.color = 'red';
+      msg.innerText = data.message || 'Registration failed';
+      return;
+    }
+
+    msg.style.color = 'green';
+    msg.innerText = 'Registration successful! Redirecting...';
+
+    setTimeout(() => {
+      window.location.href = 'auth.html';
+    }, 1500);
+
+  } catch (err) {
+    msg.style.color = 'red';
+    msg.innerText = 'Server error. Try again later.';
+    console.error('Registration error:', err);
+  }
+});
+</script>
+
+</body>
+</html>
