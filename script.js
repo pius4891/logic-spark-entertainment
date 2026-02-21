@@ -1,6 +1,6 @@
 console.log("🟢 script.js loaded");
 
-// API Configuration - Make sure this matches your backend URL
+// API Configuration
 const API_BASE_URL = "http://localhost:5000";
 
 /* =========================
@@ -30,7 +30,6 @@ async function testBackendConnection() {
 
 // Show user-friendly connection error
 function showConnectionError() {
-  // Check if error message already exists
   if (document.getElementById('connection-error')) return;
   
   const errorDiv = document.createElement('div');
@@ -67,21 +66,23 @@ function showConnectionError() {
 }
 
 /* =========================
-   PAGE NAVIGATION
+   PAGE NAVIGATION - FIXED VERSION
 ========================= */
+
+// Initialize navigation on page load
 document.addEventListener("DOMContentLoaded", async () => {
-  // Test backend connection first
-  const isConnected = await testBackendConnection();
+  console.log("DOM fully loaded");
   
-  // If not connected, still allow navigation but show warning
-  if (!isConnected) {
-    console.warn("⚠️ Running in offline mode - forms will not work");
-  }
+  // Test backend connection
+  await testBackendConnection();
   
-  // Setup navigation
+  // Setup all navigation elements
   setupNavigation();
   
-  // Initialize forms based on active page
+  // Check URL hash for direct page access
+  handleUrlHash();
+  
+  // Initialize forms based on current page
   const activePage = document.querySelector(".page.active");
   if (activePage) {
     if (activePage.id === "contact") initContactForm();
@@ -90,67 +91,166 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Update auth button
   updateAuthButton();
+  
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', function(event) {
+    handleUrlHash();
+  });
 });
 
-function setupNavigation() {
-  const navButtons = document.querySelectorAll("nav button, .footer-section a[data-page]");
-  
-  navButtons.forEach(button => {
-    button.addEventListener("click", (e) => {
-      e.preventDefault();
-      const pageId = button.dataset.page;
-      if (pageId) {
-        showPage(pageId);
-      }
-    });
-  });
+// Handle URL hash for direct linking and browser navigation
+function handleUrlHash() {
+  const hash = window.location.hash.substring(1); // Remove the # symbol
+  if (hash) {
+    // If hash exists, try to show that page
+    showPage(hash, false); // false = don't update hash again
+  } else {
+    // Default to home page
+    showPage('home', false);
+  }
 }
 
-function showPage(pageId) {
+function setupNavigation() {
+  console.log("Setting up navigation");
+  
+  // Select ALL navigation buttons and links
+  const navButtons = document.querySelectorAll("nav button, .footer-section a[data-page], .primary-btn[onclick*='showPage'], .secondary-btn[onclick*='showPage']");
+  
+  navButtons.forEach(button => {
+    // Remove existing listeners to prevent duplicates
+    button.removeEventListener('click', navigationHandler);
+    // Add new listener
+    button.addEventListener('click', navigationHandler);
+  });
+  
+  // Also handle the Login button separately
+  const loginBtn = document.querySelector(".login-btn");
+  if (loginBtn) {
+    loginBtn.removeEventListener('click', loginHandler);
+    loginBtn.addEventListener('click', loginHandler);
+  }
+}
+
+// Separate handler for login button
+function loginHandler(e) {
+  e.preventDefault();
+  window.location.href = 'auth.html';
+}
+
+// Navigation handler function
+function navigationHandler(e) {
+  e.preventDefault();
+  
+  let pageId = null;
+  
+  // Get page ID from different possible sources
+  if (this.dataset && this.dataset.page) {
+    pageId = this.dataset.page;
+  } else if (this.getAttribute('onclick')) {
+    // Parse onclick attribute for showPage calls
+    const onclick = this.getAttribute('onclick');
+    const match = onclick.match(/showPage\s*\(\s*['"]([^'"]+)['"]\s*\)/);
+    if (match) {
+      pageId = match[1];
+    }
+  }
+  
+  console.log("Navigation clicked:", pageId);
+  
+  if (pageId) {
+    showPage(pageId, true); // true = update URL hash
+  }
+}
+
+function showPage(pageId, updateHash = true) {
+  console.log("Showing page:", pageId);
+  
   // Hide all pages
-  document.querySelectorAll(".page").forEach(p => {
-    p.classList.remove("active");
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+    page.style.display = 'none';
   });
 
   // Show selected page
   const targetPage = document.getElementById(pageId);
   if (targetPage) {
     targetPage.classList.add("active");
+    targetPage.style.display = 'block';
+    
+    // Scroll to top smoothly
     window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Update active nav state
-    document.querySelectorAll("nav button").forEach(btn => {
-      btn.classList.remove("active-link");
-      if (btn.dataset.page === pageId) {
-        btn.classList.add("active-link");
-      }
-    });
+    // Update URL hash for browser history (if requested)
+    if (updateHash) {
+      window.location.hash = pageId;
+    }
+
+    // Update active state in navigation
+    updateActiveNavState(pageId);
 
     // Initialize forms if needed
-    if (pageId === "contact") initContactForm();
-    if (pageId === "sponsor-form") initSponsorForm();
+    if (pageId === "contact") {
+      setTimeout(initContactForm, 100); // Small delay to ensure DOM is ready
+    }
+    if (pageId === "sponsor-form") {
+      setTimeout(initSponsorForm, 100);
+    }
+  } else {
+    console.error("Page not found:", pageId);
+    // If page not found, show home
+    if (pageId !== 'home') {
+      showPage('home', updateHash);
+    }
   }
+}
+
+function updateActiveNavState(pageId) {
+  // Remove active class from all nav buttons
+  document.querySelectorAll("nav button").forEach(btn => {
+    btn.classList.remove("active-link");
+  });
+  
+  // Add active class to current page button
+  document.querySelectorAll(`nav button[data-page="${pageId}"]`).forEach(btn => {
+    btn.classList.add("active-link");
+  });
 }
 
 /* =========================
    CONTACT FORM
 ========================= */
 function initContactForm() {
+  console.log("Initializing contact form");
   const form = document.getElementById("contactForm");
-  if (!form) return;
+  if (!form) {
+    console.log("Contact form not found");
+    return;
+  }
 
   // Remove existing listener to prevent duplicates
   const newForm = form.cloneNode(true);
   form.parentNode.replaceChild(newForm, form);
   
-  const response = document.getElementById("formResponse") || createResponseElement(newForm);
+  // Create or get response element
+  let response = document.getElementById("formResponse");
+  if (!response) {
+    response = document.createElement("p");
+    response.id = "formResponse";
+    response.style.marginTop = "10px";
+    response.style.fontWeight = "500";
+    newForm.appendChild(response);
+  }
 
   newForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("name")?.value.trim();
-    const email = document.getElementById("email")?.value.trim();
-    const message = document.getElementById("message")?.value.trim();
+    const nameInput = newForm.querySelector('#name');
+    const emailInput = newForm.querySelector('#email');
+    const messageInput = newForm.querySelector('#message');
+    
+    const name = nameInput?.value.trim();
+    const email = emailInput?.value.trim();
+    const message = messageInput?.value.trim();
 
     // Validate
     if (!name || !email || !message) {
@@ -190,26 +290,16 @@ function initContactForm() {
   });
 }
 
-function createResponseElement(form) {
-  const response = document.createElement("p");
-  response.id = "formResponse";
-  response.style.marginTop = "10px";
-  response.style.fontWeight = "500";
-  form.appendChild(response);
-  return response;
-}
-
-function showFormResponse(element, message, color) {
-  element.textContent = message;
-  element.style.color = color;
-}
-
 /* =========================
    SPONSOR FORM
 ========================= */
 function initSponsorForm() {
+  console.log("Initializing sponsor form");
   const form = document.getElementById("sponsorForm");
-  if (!form) return;
+  if (!form) {
+    console.log("Sponsor form not found");
+    return;
+  }
 
   // Remove existing listener
   const newForm = form.cloneNode(true);
@@ -267,6 +357,13 @@ function initSponsorForm() {
   });
 }
 
+function showFormResponse(element, message, color) {
+  if (element) {
+    element.textContent = message;
+    element.style.color = color;
+  }
+}
+
 /* =========================
    AUTH BUTTON UPDATE
 ========================= */
@@ -279,7 +376,8 @@ function updateAuthButton() {
 
   if (token && user.name) {
     loginBtn.innerHTML = `<i class="fas fa-user"></i> ${user.name.split(" ")[0]}`;
-    loginBtn.onclick = () => {
+    loginBtn.onclick = (e) => {
+      e.preventDefault();
       if (confirm("Logout?")) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -288,10 +386,20 @@ function updateAuthButton() {
     };
   } else {
     loginBtn.innerHTML = '<i class="fas fa-user"></i> Login';
-    loginBtn.onclick = () => window.location.href = "auth.html";
+    loginBtn.onclick = (e) => {
+      e.preventDefault();
+      window.location.href = "auth.html";
+    };
   }
 }
 
 // Global functions
 window.showPage = showPage;
 window.showSponsorForm = () => showPage("sponsor-form");
+
+// Re-initialize on page show (for mobile browsers)
+window.addEventListener('pageshow', function(event) {
+  handleUrlHash();
+  setupNavigation();
+  updateAuthButton();
+});
