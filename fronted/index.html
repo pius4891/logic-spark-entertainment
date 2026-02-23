@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 </head>
 <body>
-
+  <div class="reading-progress"></div>
 <header class="site-header">
   <div class="header-container">
 
@@ -20,7 +19,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="main-nav">median_sales_estimate
+    <nav class="main-nav">
       <button data-page="home" class="active-link">Home</button>
       <button data-page="about">About</button>
       <button data-page="activities">Activities</button>
@@ -30,17 +29,15 @@
       <button data-page="sponsor">Sponsor</button>
     </nav>
 
-    <!-- Actions -->
+    <!-- Actions - Login button REMOVED, only home button will be added by JS -->
     <div class="header-actions">
-      <button class="login-btn" onclick="window.location.href='auth.html'">
-        <i class="fas fa-user"></i> Login
-      </button>
+      <!-- Home button will be added here by JavaScript -->
     </div>
 
   </div>
 </header>
 
-
+<!-- Rest of your HTML remains exactly the same ... -->
 <main>
 <!-- ================= HOME PAGE ================= -->
 <section id="home" class="page active home-section">
@@ -70,17 +67,17 @@
   <!-- FEATURES -->
   <div class="home-features">
     <div class="feature-card">
-      <img src="images/pag2.jpeg">
+      <img src="images/pag2.jpeg" alt="Corporate Events">
       <h4>Corporate & Youth Events</h4>
     </div>
 
     <div class="feature-card">
-      <img src="images/gap.png">
+      <img src="images/gap.png" alt="Music Festivals">
       <h4>Music & Festivals</h4>
     </div>
 
     <div class="feature-card">
-      <img src="images/mentorship.png">
+      <img src="images/mentor.png" alt="Mentorship">
       <h4>Mentorship Programs</h4>
     </div>
   </div>
@@ -276,48 +273,115 @@
     </div>
 </section>
 
-    <!-- ACTIVITIES SECTION -->
-    <section id="activities" class="page">
-        <h2>Our Activities</h2>
-        <p>
-            We run impactful programs that empower youth, promote creativity,
-            and connect talent with real-world opportunities.
-        </p>
-
-        <div class="cards">
-            <div class="card corporate">
-                <h3>Corporate & Professional Events</h3>
-                <p>
-                    Business forums, networking sessions, and mentorship programs
-                    that prepare youth for the professional world.
-                </p>
-            </div>
-
-            <div class="card music">
-                <h3>Music & Talent Development</h3>
-                <p>
-                    Platforms for artists, dancers, and performers to showcase
-                    and develop their creative skills.
-                </p>
-            </div>
-
-            <div class="card festival">
-                <h3>Festivals & Live Shows</h3>
-                <p>
-                    Youth-centered festivals such as Future Fest,
-                    celebrating creativity, culture, and innovation.
-                </p>
-            </div>
-
-            <div class="card podcast">
-                <h3>Media, Podcast & Content</h3>
-                <p>
-                    Digital media and podcasts that amplify youth voices
-                    and inspire positive social change.
-                </p>
-            </div>
+    <!-- ACTIVITIES SECTION - COMPLETE MODERN VERSION -->
+<section id="activities" class="page">
+    <!-- Counter Badge (Optional) -->
+    <div class="counter-badge">
+        <span>4</span> Impact Programs
+    </div>
+    
+    <h2>Our Activities</h2>
+    <p>
+        We run impactful programs that empower youth, promote creativity,
+        and connect talent with real-world opportunities.
+    </p>
+    
+    <!-- Quick Stats Strip (Optional) -->
+    <div class="quick-stats">
+        <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Events Yearly</div>
         </div>
-    </section>
+        <div class="stat-item">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">Youth Empowered</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Partner Brands</div>
+        </div>
+    </div>
+    
+    <!-- Cards Grid -->
+    <div class="cards">
+        <!-- Corporate Events Card -->
+        <div class="card corporate">
+            <!-- Border Animation Element -->
+            <div class="border-animation"></div>
+            
+            <!-- Card Icon -->
+            <div class="card-icon">
+                <i class="fas fa-briefcase"></i>
+            </div>
+            
+            <!-- Card Tag -->
+            <div class="card-tag">Corporate</div>
+            
+            <!-- Card Content -->
+            <h3>Corporate & Professional Events</h3>
+            <p>
+                Business forums, networking sessions, and mentorship programs
+                that prepare youth for the professional world. Connect with industry
+                leaders and gain valuable insights.
+            </p>
+        </div>
+        
+        <!-- Music & Talent Card -->
+        <div class="card music">
+            <div class="border-animation"></div>
+            <div class="card-icon">
+                <i class="fas fa-music"></i>
+            </div>
+            <div class="card-tag">Talent</div>
+            <h3>Music & Talent Development</h3>
+            <p>
+                Platforms for artists, dancers, and performers to showcase
+                and develop their creative skills. Regular workshops and 
+                performance opportunities.
+            </p>
+        </div>
+        
+        <!-- Festivals Card -->
+        <div class="card festival">
+            <div class="border-animation"></div>
+            <div class="card-icon">
+                <i class="fas fa-guitar"></i>
+            </div>
+            <div class="card-tag">Festivals</div>
+            <h3>Festivals & Live Shows</h3>
+            <p>
+                Youth-centered festivals such as Future Fest,
+                celebrating creativity, culture, and innovation. Annual events
+                featuring top artists and performers.
+            </p>
+        </div>
+        
+        <!-- Media & Podcast Card -->
+        <div class="card podcast">
+            <div class="border-animation"></div>
+            <div class="card-icon">
+                <i class="fas fa-microphone-alt"></i>
+            </div>
+            <div class="card-tag">Media</div>
+            <h3>Media, Podcast & Content</h3>
+            <p>
+                Digital media and podcasts that amplify youth voices
+                and inspire positive social change. Weekly episodes and
+                engaging content creation.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Call to Action (Optional) -->
+    <div class="activities-cta">
+        <button class="primary-btn" onclick="showPage('contact')">
+            <i class="fas fa-calendar-check"></i> Join an Activity
+        </button>
+        <button class="secondary-btn" onclick="showPage('sponsor')">
+            <i class="fas fa-handshake"></i> Partner With Us
+        </button>
+    </div>
+</section>
 
     <!-- SHOP SECTION -->
     <section id="shop" class="page">
@@ -477,7 +541,7 @@
         <li>Gain brand visibility at major events</li>
         <li>Build long-term community impact</li>
        </ul>
-             <!-- NEW CONTENT STARTS HERE -->
+             
   <div class="sponsor-extra">
     <h3>Why Sponsor Logic Spark?</h3>
     <p>
@@ -520,7 +584,6 @@
       build something meaningful together.
     </p>
   </div>
-  <!-- NEW CONTENT ENDS HERE -->
 
        <button class="primary-btn" onclick="showSponsorForm()">
         Become a Sponsor
@@ -537,7 +600,6 @@
        </p>
 
        <form id="sponsorForm">
-
 
         <input type="text" name="Name" placeholder="Full Name / Organization" required>
 
@@ -564,7 +626,6 @@
 
        </form>
     </section>
-
 
 </main>
 
@@ -598,22 +659,32 @@
         <!-- CONTACT INFO -->
         <div class="footer-section">
             <h4>Contact Us</h4>
-            <p>Email: <a href="futurefest001@gmail.com">futurefest001@gmail.com</a></p>
+            <p>Email: <a href="mailto:futurefest001@gmail.com">futurefest001@gmail.com</a></p>
             <p>Phone: +254 115503803</p>
             <p>Location: Kenya</p>
         </div>
 
         <!-- SOCIAL MEDIA -->
-        <div class="footer-section">
-            <h4>Follow Us</h4>
-            <div class="social-links">
-                <a href="#" aria-label="Facebook">Facebook</a>
-                <a href="https://www.instagram.com/future_fest001?igsh=b3licGVqYmNpeW05">Instagram</a>
-                <a href="#" aria-label="YouTube">YouTube</a>
-                <a href="#" aria-label="Podcast">Podcast</a>
-                <a href="https://www.tiktok.com/@sir_kiongo?_r=1&_t=ZM-92LeYQWNUbL">Tiktok</a>
-            </div>
-        </div>
+      <div class="footer-section">
+       <h4>Follow Us</h4>
+        <div class="social-links">
+        <a href="#" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/future_fest001?igsh=b3licGVqYmNpeW05" aria-label="Instagram">
+            <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="#" aria-label="YouTube">
+            <i class="fab fa-youtube"></i> YouTube
+        </a>
+        <a href="#" aria-label="Podcast">
+            <i class="fas fa-podcast"></i> Podcast
+        </a>
+        <a href="https://www.tiktok.com/@sir_kiongo?_r=1&_t=ZM-92LeYQWNUbL" aria-label="TikTok">
+            <i class="fab fa-tiktok"></i> TikTok
+        </a>
+      </div>
+    </div>
 
     </div>
 
@@ -624,8 +695,6 @@
     </div>
 </footer>
 
-
 <script src="script.js"></script>
 </body>
 </html>
-

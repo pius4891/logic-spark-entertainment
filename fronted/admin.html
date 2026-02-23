@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Logic Spark</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Admin Login Styles */
+        .admin-login {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: #16213e;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .admin-login h2 {
+            color: #ff8c00;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .admin-login input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            background: #1a1a2e;
+            border: 1px solid #ff8c00;
+            border-radius: 5px;
+            color: #fff;
+        }
+        
+        .admin-login button {
+            width: 100%;
+            padding: 12px;
+            background: #ff8c00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .admin-login button:hover {
+            background: #ff7000;
+        }
+        
+        /* Dashboard Styles */
+        .admin-dashboard {
+            display: none;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #16213e;
+            border-radius: 10px;
+        }
+        
+        .dashboard-header h2 {
+            color: #ff8c00;
+            margin: 0;
+        }
+        
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .logout-btn:hover {
+            background: #d32f2f;
+        }
+        
+        /* Stats Cards */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            color: #ff8c00;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            margin-top: 5px;
+        }
+        
+        /* Tabs */
+        .dashboard-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid #ff8c00;
+            color: #ff8c00;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab-btn.active {
+            background: #ff8c00;
+            color: #fff;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Messages Grid */
+        .messages-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .message-card {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff8c00;
+        }
+        
+        .message-card.unread {
+            border-left-color: #4caf50;
+            background: #1a2a4a;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #ff8c00;
+        }
+        
+        .message-date {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .message-email {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .message-content {
+            color: #ccc;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .message-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .read-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .delete-btn {
+            background: #f44336;
+            color: white;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #ff8c00;
+        }
+        
+        .error-message {
+            color: #f44336;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .success-message {
+            color: #4caf50;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div class="admin-login" id="loginSection">
+        <h2><i class="fas fa-lock"></i> Admin Login</h2>
+        <form id="adminLoginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="loginMessage" style="text-align: center; margin-top: 15px;"></p>
+    </div>
+    
+    <!-- Dashboard Section -->
+    <div class="admin-dashboard" id="dashboardSection">
+        <div class="dashboard-header">
+            <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+            <div>
+                <span id="adminName" style="margin-right: 20px; color: #ff8c00;"></span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="stats-cards" id="statsCards"></div>
+        
+        <!-- Tabs -->
+        <div class="dashboard-tabs">
+            <button class="tab-btn active" onclick="switchTab('contacts')">Contact Messages</button>
+            <button class="tab-btn" onclick="switchTab('sponsors')">Sponsor Requests</button>
+        </div>
+        
+        <!-- Contacts Tab -->
+        <div id="contactsTab" class="tab-content active">
+            <h3>Contact Messages</h3>
+            <div id="contactsList" class="messages-grid"></div>
+        </div>
+        
+        <!-- Sponsors Tab -->
+        <div id="sponsorsTab" class="tab-content">
+            <h3>Sponsor Requests</h3>
+            <div id="sponsorsList" class="messages-grid"></div>
+        </div>
+    </div>
+    
+    <script>
+        // API Configuration
+        const API_BASE_URL = "http://localhost:5000";
+        
+        // Check if already logged in
+        let adminToken = localStorage.getItem('adminToken');
+        let currentAdmin = JSON.parse(localStorage.getItem('currentAdmin') || '{}');
+        
+        // If token exists, show dashboard
+        if (adminToken) {
+            showDashboard();
+            loadData();
+        }
+        
+        // Admin Login Form Handler
+        document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('loginMessage');
+            
+            msg.textContent = "Logging in...";
+            msg.style.color = "#ff8c00";
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    throw new Error(data.message || "Login failed");
+                }
+                
+                adminToken = data.token;
+                currentAdmin = data.admin;
+                
+                localStorage.setItem('adminToken', adminToken);
+                localStorage.setItem('currentAdmin', JSON.stringify(currentAdmin));
+                
+                msg.textContent = "Login successful! Redirecting...";
+                msg.style.color = "green";
+                
+                setTimeout(() => {
+                    showDashboard();
+                    loadData();
+                }, 1000);
+                
+            } catch (err) {
+                msg.textContent = err.message;
+                msg.style.color = "red";
+            }
+        });
+        
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            document.getElementById('adminName').textContent = `Welcome, ${currentAdmin.username || 'Admin'}`;
+        }
+        
+        // Load All Data
+        async function loadData() {
+            await loadStats();
+            await loadContacts();
+            await loadSponsors();
+        }
+        
+        // Load Statistics
+        async function loadStats() {
+            try {
+                const contactsRes = await fetch(`${API_BASE_URL}/api/admin/contacts`, {
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+                const contactsData = await contactsRes.json();
+                
+                const sponsorsRes = await fetch(`${API_BASE_URL}/api/admin/sponsors`, {
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+                const sponsorsData = await sponsorsRes.json();
+                
+                const contacts = contactsData.data || [];
+                const sponsors = sponsorsData.data || [];
+                
+                const unreadContacts = contacts.filter(c => !c.is_read).length;
+                const unreadSponsors = sponsors.filter(s => !s.is_read).length;
+                
+                document.getElementById('statsCards').innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">${contacts.length}</div>
+                        <div class="stat-label">Total Messages</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${unreadContacts}</div>
+                        <div class="stat-label">Unread Messages</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${sponsors.length}</div>
+                        <div class="stat-label">Sponsor Requests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${unreadSponsors}</div>
+                        <div class="stat-label">New Requests</div>
+                    </div>
+                `;
+                
+            } catch (err) {
+                console.error("Error loading stats:", err);
+            }
+        }
+        
+        // Load Contact Messages
+        async function loadContacts() {
+            const contactsList = document.getElementById('contactsList');
+            contactsList.innerHTML = '<div class="loading">Loading messages...</div>';
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/contacts`, {
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+                const data = await res.json();
+                
+                if (data.data.length === 0) {
+                    contactsList.innerHTML = '<div class="error-message">No messages yet</div>';
+                    return;
+                }
+                
+                contactsList.innerHTML = data.data.map(msg => `
+                    <div class="message-card ${!msg.is_read ? 'unread' : ''}">
+                        <div class="message-header">
+                            <strong><i class="fas fa-user"></i> ${msg.fullname}</strong>
+                            <span class="message-date"><i class="far fa-clock"></i> ${new Date(msg.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="message-email"><i class="fas fa-envelope"></i> ${msg.email}</div>
+                        <div class="message-content">${msg.message}</div>
+                        <div class="message-actions">
+                            ${!msg.is_read ? `<button class="action-btn read-btn" onclick="markAsRead('contacts', ${msg.id})"><i class="fas fa-check"></i> Mark Read</button>` : ''}
+                            <button class="action-btn delete-btn" onclick="deleteMessage('contacts', ${msg.id})"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (err) {
+                contactsList.innerHTML = '<div class="error-message">Error loading messages</div>';
+            }
+        }
+        
+        // Load Sponsor Requests
+        async function loadSponsors() {
+            const sponsorsList = document.getElementById('sponsorsList');
+            sponsorsList.innerHTML = '<div class="loading">Loading requests...</div>';
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/sponsors`, {
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+                const data = await res.json();
+                
+                if (data.data.length === 0) {
+                    sponsorsList.innerHTML = '<div class="error-message">No sponsorship requests yet</div>';
+                    return;
+                }
+                
+                sponsorsList.innerHTML = data.data.map(req => `
+                    <div class="message-card ${!req.is_read ? 'unread' : ''}">
+                        <div class="message-header">
+                            <strong><i class="fas fa-building"></i> ${req.name}</strong>
+                            <span class="message-date"><i class="far fa-clock"></i> ${new Date(req.created_at).toLocaleString()}</span>
+                        </div>
+                        <div class="message-email">
+                            <i class="fas fa-envelope"></i> ${req.email} | 
+                            <i class="fas fa-phone"></i> ${req.phone || 'No phone'}
+                        </div>
+                        <div class="message-content">
+                            <strong>Support Type:</strong> ${req.support_type}<br><br>
+                            <strong>Message:</strong> ${req.message}
+                        </div>
+                        <div class="message-actions">
+                            ${!req.is_read ? `<button class="action-btn read-btn" onclick="markAsRead('sponsors', ${req.id})"><i class="fas fa-check"></i> Mark Read</button>` : ''}
+                            <button class="action-btn delete-btn" onclick="deleteMessage('sponsors', ${req.id})"><i class="fas fa-trash"></i> Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (err) {
+                sponsorsList.innerHTML = '<div class="error-message">Error loading requests</div>';
+            }
+        }
+        
+        // Mark Message as Read
+        async function markAsRead(type, id) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/${type}/${id}/read`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+                
+                if (res.ok) {
+                    // Reload data to reflect changes
+                    await loadData();
+                }
+            } catch (err) {
+                console.error("Error marking as read:", err);
+                alert("Failed to mark as read");
+            }
+        }
+        
+        // Delete Message
+        async function deleteMessage(type, id) {
+            if (!confirm('Are you sure you want to delete this message?')) return;
+            
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/${type}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${adminToken}` }
+                });
+                
+                if (res.ok) {
+                    // Reload data to reflect changes
+                    await loadData();
+                }
+            } catch (err) {
+                console.error("Error deleting message:", err);
+                alert("Failed to delete message");
+            }
+        }
+        
+        // Switch Tabs
+        function switchTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tab === 'contacts') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('contactsTab').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('sponsorsTab').classList.add('active');
+            }
+        }
+        
+        // Logout Function
+        function logout() {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('currentAdmin');
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>

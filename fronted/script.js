@@ -96,9 +96,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (activePage.id === "sponsor-form") initSponsorForm();
   }
   
-  // Update auth button
-  updateAuthButton();
-  
   // Handle browser back/forward buttons
   window.addEventListener('popstate', function(event) {
     if (event.state && event.state.page) {
@@ -130,12 +127,6 @@ function setupNavigation() {
     button.addEventListener('click', navigationHandler);
   });
   
-  // Handle login button
-  const loginBtn = document.querySelector(".login-btn");
-  if (loginBtn) {
-    loginBtn.removeEventListener('click', loginHandler);
-    loginBtn.addEventListener('click', loginHandler);
-  }
   
   // Add home button to header if it doesn't exist
   addHomeButtonToHeader();
@@ -152,14 +143,6 @@ function addHomeButtonToHeader() {
   const homeBtn = document.createElement('button');
   homeBtn.className = 'home-nav-btn';
   homeBtn.innerHTML = '<i class="fas fa-home"></i> Home';
-  homeBtn.style.marginRight = '10px';
-  homeBtn.style.backgroundColor = 'transparent';
-  homeBtn.style.border = '1px solid #ff8c00';
-  homeBtn.style.color = '#ff8c00';
-  homeBtn.style.padding = '8px 15px';
-  homeBtn.style.borderRadius = '5px';
-  homeBtn.style.cursor = 'pointer';
-  homeBtn.style.fontWeight = '500';
   
   homeBtn.addEventListener('click', (e) => {
     e.preventDefault();
@@ -176,7 +159,8 @@ function addHomeButtonToHeader() {
     homeBtn.style.color = '#ff8c00';
   });
   
-  headerActions.prepend(homeBtn);
+  // Add to header actions
+  headerActions.appendChild(homeBtn);
 }
 
 // Add "Back to Home" button to each page
@@ -209,12 +193,6 @@ function addBackToHomeButton() {
     
     page.appendChild(backButton);
   });
-}
-
-// Login handler
-function loginHandler(e) {
-  e.preventDefault();
-  window.location.href = 'auth.html';
 }
 
 // Navigation handler function
@@ -483,35 +461,6 @@ function showFormResponse(element, message, color) {
   }
 }
 
-/* =========================
-   AUTH BUTTON UPDATE
-========================= */
-function updateAuthButton() {
-  const loginBtn = document.querySelector(".login-btn");
-  if (!loginBtn) return;
-
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-
-  if (token && user.name) {
-    loginBtn.innerHTML = `<i class="fas fa-user"></i> ${user.name.split(" ")[0]}`;
-    loginBtn.onclick = (e) => {
-      e.preventDefault();
-      if (confirm("Logout?")) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        window.location.reload();
-      }
-    };
-  } else {
-    loginBtn.innerHTML = '<i class="fas fa-user"></i> Login';
-    loginBtn.onclick = (e) => {
-      e.preventDefault();
-      window.location.href = "auth.html";
-    };
-  }
-}
-
 // Global functions
 window.showPage = showPage;
 window.showSponsorForm = () => showPage("sponsor-form");
@@ -522,5 +471,43 @@ window.addEventListener('pageshow', function(event) {
   handleUrlHash();
   setupNavigation();
   addBackToHomeButton();
-  updateAuthButton();
+  // updateAuthButton() REMOVED
+});
+// Add floating particles (optional)
+function createParticles() {
+    const section = document.querySelector('.home-section');
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        particle.style.animationDuration = 10 + Math.random() * 10 + 's';
+        section.appendChild(particle);
+    }
+}
+
+// Call it in your DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+    createParticles();
+    // ... rest of your code
+});
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.querySelector('.reading-progress').style.width = scrolled + '%';
+});
+document.querySelectorAll('#activities .card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        const ripple = document.createElement('div');
+        ripple.className = 'ripple-effect';
+        const rect = card.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+        card.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+    });
 });
