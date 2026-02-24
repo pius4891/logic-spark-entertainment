@@ -24,7 +24,11 @@ const transporter = nodemailer.createTransport({
 
 // CORS configuration
 app.use(cors({
-  origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+  origin: [
+    "http://127.0.0.1:5500", 
+    "http://localhost:5500",
+    "https://logic-spark-entertainment.vercel.app/" // YOUR VERCEL URL
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
