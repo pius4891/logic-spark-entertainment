@@ -76,7 +76,7 @@ app.get("/api/health", async (req, res) => {
    ====================== */
 app.get("/api/hash-admin-password", async (req, res) => {
     try {
-        const bcrypt = require('bcrypt');
+        // Use bcrypt directly - it's already imported at the top
         const hashedPassword = await bcrypt.hash('admin123', 10);
         
         const result = await pool.query(
@@ -110,7 +110,6 @@ app.get("/api/hash-admin-password", async (req, res) => {
         });
     }
 });
-
 /* ======================
    PUBLIC ROUTES
 ====================== */
