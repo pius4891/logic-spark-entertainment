@@ -72,6 +72,46 @@ app.get("/api/health", async (req, res) => {
 });
 
 /* ======================
+   🔴 TEMPORARY ROUTE - REMOVE AFTER USE 🔴
+   ====================== */
+app.get("/api/hash-admin-password", async (req, res) => {
+    try {
+        const bcrypt = require('bcrypt');
+        const hashedPassword = await bcrypt.hash('admin123', 10);
+        
+        const result = await pool.query(
+            `UPDATE admin_users SET password = $1 WHERE username = 'admin' RETURNING *`,
+            [hashedPassword]
+        );
+        
+        if (result.rows.length === 0) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "❌ Admin user not found. Please create admin user first." 
+            });
+        }
+        
+        console.log("✅ Admin password hashed successfully for:", result.rows[0].username);
+        
+        res.json({ 
+            success: true, 
+            message: "✅ Admin password hashed successfully!",
+            credentials: {
+                username: "admin",
+                password: "admin123"
+            },
+            warning: "⚠️  REMOVE THIS ROUTE IMMEDIATELY AFTER USE! ⚠️"
+        });
+    } catch (error) {
+        console.error("❌ Password hashing error:", error);
+        res.status(500).json({ 
+            success: false, 
+            error: error.message 
+        });
+    }
+});
+
+/* ======================
    PUBLIC ROUTES
 ====================== */
 
