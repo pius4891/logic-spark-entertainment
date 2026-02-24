@@ -70,13 +70,12 @@ app.get("/api/health", async (req, res) => {
     });
   }
 });
-
 /* ======================
-   🔴 TEMPORARY ROUTE - REMOVE AFTER USE 🔴
-   ====================== */
+   TEMPORARY ROUTE - REMOVE AFTER USE
+====================== */
 app.get("/api/hash-admin-password", async (req, res) => {
     try {
-        // Use bcrypt directly - it's already imported at the top
+        const bcrypt = require('bcrypt');
         const hashedPassword = await bcrypt.hash('admin123', 10);
         
         const result = await pool.query(
@@ -87,11 +86,9 @@ app.get("/api/hash-admin-password", async (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ 
                 success: false, 
-                message: "❌ Admin user not found. Please create admin user first." 
+                message: "Admin user not found. Please create admin user first." 
             });
         }
-        
-        console.log("✅ Admin password hashed successfully for:", result.rows[0].username);
         
         res.json({ 
             success: true, 
@@ -100,10 +97,10 @@ app.get("/api/hash-admin-password", async (req, res) => {
                 username: "admin",
                 password: "admin123"
             },
-            warning: "⚠️  REMOVE THIS ROUTE IMMEDIATELY AFTER USE! ⚠️"
+            note: "REMOVE THIS ROUTE IMMEDIATELY AFTER USE!"
         });
     } catch (error) {
-        console.error("❌ Password hashing error:", error);
+        console.error("Password hashing error:", error);
         res.status(500).json({ 
             success: false, 
             error: error.message 
