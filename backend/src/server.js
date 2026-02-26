@@ -27,7 +27,7 @@ app.use(cors({
   origin: [
     "http://127.0.0.1:5500", 
     "http://localhost:5500",
-    "https://logic-spark-entertainment.vercel.app/" // YOUR VERCEL URL
+    "https://logic-spark-entertainment.vercel.app" // YOUR VERCEL URL
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
@@ -73,43 +73,6 @@ app.get("/api/health", async (req, res) => {
       }
     });
   }
-});
-/* ======================
-   TEMPORARY ROUTE - REMOVE AFTER USE
-====================== */
-app.get("/api/hash-admin-password", async (req, res) => {
-    try {
-        const bcrypt = require('bcrypt');
-        const hashedPassword = await bcrypt.hash('admin123', 10);
-        
-        const result = await pool.query(
-            `UPDATE admin_users SET password = $1 WHERE username = 'admin' RETURNING *`,
-            [hashedPassword]
-        );
-        
-        if (result.rows.length === 0) {
-            return res.status(404).json({ 
-                success: false, 
-                message: "Admin user not found. Please create admin user first." 
-            });
-        }
-        
-        res.json({ 
-            success: true, 
-            message: "✅ Admin password hashed successfully!",
-            credentials: {
-                username: "admin",
-                password: "admin123"
-            },
-            note: "REMOVE THIS ROUTE IMMEDIATELY AFTER USE!"
-        });
-    } catch (error) {
-        console.error("Password hashing error:", error);
-        res.status(500).json({ 
-            success: false, 
-            error: error.message 
-        });
-    }
 });
 /* ======================
    PUBLIC ROUTES

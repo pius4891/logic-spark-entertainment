@@ -1,3 +1,4 @@
+// backend/src/db.js
 import pkg from "pg";
 import dotenv from "dotenv";
 
@@ -5,12 +6,18 @@ dotenv.config();
 
 const { Pool } = pkg;
 
-// This configuration is proven to work on Render
+// Check if we're in production (Render) or development (local)
+const isProduction = process.env.NODE_ENV === 'production';
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false // Render requires this for external connections
-  },
+  ...(isProduction ? {
+    ssl: {
+      rejectUnauthorized: false // SSL only in production
+    }
+  } : {
+    ssl: false // No SSL for local development
+  }),
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
@@ -20,9 +27,10 @@ const pool = new Pool({
 pool.connect((err, client, release) => {
   if (err) {
     console.error("❌ PostgreSQL connection error:", err.message);
-    console.error("Full error:", err);
+    console.error("Environment:", process.env.NODE_ENV || 'development');
+    console.error("SSL Enabled:", isProduction ? "Yes" : "No");
   } else {
-    console.log("✅ PostgreSQL connected successfully to Render");
+    console.log(`✅ PostgreSQL connected successfully (${isProduction ? 'production' : 'development'} mode)`);
     release();
   }
 });

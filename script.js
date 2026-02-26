@@ -1,7 +1,7 @@
 console.log("🟢 script.js loaded");
 
 // API Configuration
-const API_BASE_URL = "https://logic-spark-entertainment.onrender.com";;
+const API_BASE_URL = "https://logic-spark-entertainment.onrender.com";
 
 /* =========================
    BACKEND CONNECTION TEST
