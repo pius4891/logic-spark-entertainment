@@ -75,22 +75,21 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// TEMPORARY ROUTE - CREATE OR UPDATE ADMIN (REMOVE AFTER USE)
-app.get("/api/set-admin", async (req, res) => {
+// TEMPORARY ROUTE - CREATE ADMIN USER (REMOVE AFTER USE)
+app.get("/api/create-admin-user", async (req, res) => {
     try {
-        const bcrypt = require('bcrypt');
-        
-        // CHANGE THESE VALUES to what you want
-        const username = "Pius_mu";
-        const password = "Pius2030"; // Change this to your desired password
-        const email = "piusmutumiria@gmail.com";
+        // Use bcrypt directly - it's already imported at the top
+        // SET YOUR DESIRED CREDENTIALS HERE
+        const username = "Pius_mu";        // Change if you want
+        const password = "LogicSpark2025!";     // Change to your desired password
+        const email = "piusmutumiria@gmail.com"; // Your email
         
         const hashedPassword = await bcrypt.hash(password, 10);
         
         // Check if admin exists
         const existing = await pool.query(
-            "SELECT * FROM admin_users WHERE username = $1",
-            [username]
+            "SELECT * FROM admin_users WHERE username = $1 OR email = $2",
+            [username, email]
         );
         
         if (existing.rows.length > 0) {
@@ -118,7 +117,7 @@ app.get("/api/set-admin", async (req, res) => {
             });
         }
     } catch (error) {
-        console.error("Admin setup error:", error);
+        console.error("Admin creation error:", error);
         res.status(500).json({ 
             success: false, 
             error: error.message 
