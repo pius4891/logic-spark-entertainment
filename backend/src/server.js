@@ -75,55 +75,6 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// TEMPORARY ROUTE - CREATE ADMIN USER (REMOVE AFTER USE)
-app.get("/api/create-admin-user", async (req, res) => {
-    try {
-        // Use bcrypt directly - it's already imported at the top
-        // SET YOUR DESIRED CREDENTIALS HERE
-        const username = "Pius_mu";        // Change if you want
-        const password = "LogicSpark2025!";     // Change to your desired password
-        const email = "piusmutumiria@gmail.com"; // Your email
-        
-        const hashedPassword = await bcrypt.hash(password, 10);
-        
-        // Check if admin exists
-        const existing = await pool.query(
-            "SELECT * FROM admin_users WHERE username = $1 OR email = $2",
-            [username, email]
-        );
-        
-        if (existing.rows.length > 0) {
-            // Update existing admin
-            await pool.query(
-                "UPDATE admin_users SET password = $1, email = $2 WHERE username = $3",
-                [hashedPassword, email, username]
-            );
-            res.json({ 
-                success: true, 
-                message: `✅ Admin '${username}' UPDATED with new password!`,
-                credentials: { username, password, email }
-            });
-        } else {
-            // Create new admin
-            await pool.query(
-                `INSERT INTO admin_users (username, password, email, role) 
-                 VALUES ($1, $2, $3, $4)`,
-                [username, hashedPassword, email, 'admin']
-            );
-            res.json({ 
-                success: true, 
-                message: `✅ Admin '${username}' CREATED successfully!`,
-                credentials: { username, password, email }
-            });
-        }
-    } catch (error) {
-        console.error("Admin creation error:", error);
-        res.status(500).json({ 
-            success: false, 
-            error: error.message 
-        });
-    }
-});
 /* ======================
    PUBLIC ROUTES
 ====================== */
