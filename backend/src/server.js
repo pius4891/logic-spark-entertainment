@@ -241,7 +241,7 @@ app.post("/api/contacts", async (req, res) => {
               <p><strong style="color: #ff8c00;">Received:</strong> ${new Date().toLocaleString()}</p>
             </div>
             <p style="text-align: center; margin-top: 20px;">
-              <a href="http://localhost:5500/admin.html" style="background: #ff8c00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View in Dashboard</a>
+              <a href="https://logic-spark-entertainment.vercel.app/admin.html" style="background: #ff8c00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View in Dashboard</a>
             </p>
           </div>
         `
@@ -307,7 +307,7 @@ app.post("/api/sponsors", async (req, res) => {
               <p><strong style="color: #ff8c00;">Received:</strong> ${new Date().toLocaleString()}</p>
             </div>
             <p style="text-align: center; margin-top: 20px;">
-              <a href="http://localhost:5500/admin.html" style="background: #ff8c00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View in Dashboard</a>
+              <a href="https://logic-spark-entertainment.vercel.app/admin.html" style="background: #ff8c00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">View in Dashboard</a>
             </p>
           </div>
         `
