@@ -523,23 +523,6 @@ app.get("/api/admin/setup", async (req, res) => {
   }
 });
 
-/* ======================
-   ERROR HANDLING
-====================== */
-app.use((err, req, res, next) => {
-  console.error("❌ Unhandled error:", err);
-  res.status(500).json({
-    success: false,
-    message: "Internal server error"
-  });
-});
-
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found"
-  });
-});
 // TEMPORARY ROUTE - CREATE TABLES (REMOVE AFTER USE)
 app.get("/api/setup-tables", async (req, res) => {
     try {
@@ -586,6 +569,23 @@ app.get("/api/setup-tables", async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
+});
+/* ======================
+   ERROR HANDLING
+====================== */
+app.use((err, req, res, next) => {
+  console.error("❌ Unhandled error:", err);
+  res.status(500).json({
+    success: false,
+    message: "Internal server error"
+  });
+});
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
+  });
 });
 
 /* ======================
