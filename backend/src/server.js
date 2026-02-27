@@ -74,6 +74,57 @@ app.get("/api/health", async (req, res) => {
     });
   }
 });
+
+// TEMPORARY ROUTE - CREATE OR UPDATE ADMIN (REMOVE AFTER USE)
+app.get("/api/set-admin", async (req, res) => {
+    try {
+        const bcrypt = require('bcrypt');
+        
+        // CHANGE THESE VALUES to what you want
+        const username = "Pius_mu";
+        const password = "Pius2030"; // Change this to your desired password
+        const email = "piusmutumiria@gmail.com";
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Check if admin exists
+        const existing = await pool.query(
+            "SELECT * FROM admin_users WHERE username = $1",
+            [username]
+        );
+        
+        if (existing.rows.length > 0) {
+            // Update existing admin
+            await pool.query(
+                "UPDATE admin_users SET password = $1, email = $2 WHERE username = $3",
+                [hashedPassword, email, username]
+            );
+            res.json({ 
+                success: true, 
+                message: `✅ Admin '${username}' UPDATED with new password!`,
+                credentials: { username, password, email }
+            });
+        } else {
+            // Create new admin
+            await pool.query(
+                `INSERT INTO admin_users (username, password, email, role) 
+                 VALUES ($1, $2, $3, $4)`,
+                [username, hashedPassword, email, 'admin']
+            );
+            res.json({ 
+                success: true, 
+                message: `✅ Admin '${username}' CREATED successfully!`,
+                credentials: { username, password, email }
+            });
+        }
+    } catch (error) {
+        console.error("Admin setup error:", error);
+        res.status(500).json({ 
+            success: false, 
+            error: error.message 
+        });
+    }
+});
 /* ======================
    PUBLIC ROUTES
 ====================== */
@@ -523,53 +574,6 @@ app.get("/api/admin/setup", async (req, res) => {
   }
 });
 
-// TEMPORARY ROUTE - CREATE TABLES (REMOVE AFTER USE)
-app.get("/api/setup-tables", async (req, res) => {
-    try {
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS admin_users (
-                id SERIAL PRIMARY KEY,
-                username VARCHAR(50) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                role VARCHAR(20) DEFAULT 'admin',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-
-            CREATE TABLE IF NOT EXISTS contacts (
-                id SERIAL PRIMARY KEY,
-                fullname VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                message TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                is_read BOOLEAN DEFAULT FALSE
-            );
-
-            CREATE TABLE IF NOT EXISTS sponsors (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
-                email VARCHAR(100) NOT NULL,
-                phone VARCHAR(20),
-                support_type VARCHAR(50) NOT NULL,
-                message TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                is_read BOOLEAN DEFAULT FALSE
-            );
-
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
-        
-        res.json({ success: true, message: "✅ Tables created successfully!" });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
 /* ======================
    ERROR HANDLING
 ====================== */
